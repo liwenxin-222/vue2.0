@@ -6,18 +6,20 @@
 		isShowLegend: Boolean 是否显示legend
 	}
 */
-export const returnPieOptions = function({ seriesName, isShowLegend, data }) {
+export const returnRateOptions = function({ color, textColor = color, value = 0 }) {
   return {
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      top: '5%',
+    title: [{
+      text: `${value}%`,
       left: 'center',
-      show: isShowLegend
-    },
+      top: 'center',
+      fontSize: 50,
+      textStyle: {
+        fontSize: 20,
+        color: textColor
+      }
+    }],
     series: [{
-      name: seriesName,
+      // name: seriesName,
       type: 'pie',
       radius: ['40%', '70%'],
       avoidLabelOverlap: false,
@@ -27,15 +29,16 @@ export const returnPieOptions = function({ seriesName, isShowLegend, data }) {
       },
       emphasis: {
         label: {
-          show: true,
-          fontSize: '40',
-          fontWeight: 'bold'
+          show: false
         }
       },
       labelLine: {
         show: false
       },
-      data
+      data: [
+        { value: value, itemStyle: { color } },
+        { value: 100 - value, itemStyle: { color: '#dddddd' } }
+      ]
     }]
   };
 }
