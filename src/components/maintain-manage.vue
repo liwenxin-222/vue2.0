@@ -151,9 +151,9 @@
 	import moment from 'moment'
 	import * as echarts from 'echarts'
 	import { returnRateOptions } from './echarts-func.js'
-	import imageA from '../assets/绿地 (3).png'
-	import imageB from '../assets/养护管理.png'
-	import imageC from '../assets/207问题.png'
+	import imageA from '../assets/imageA.png'
+	import imageB from '../assets/imageB.png'
+	import imageC from '../assets/imageC.png'
 
 	const layerConfig = [
 		{ label: '2d地图', key: '2d', funcName: 'setMapLayer2d' },
