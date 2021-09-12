@@ -3,10 +3,10 @@
     <MMap ref="map"></MMap>
     <div class="top">
       <div class="top-left">
-        <el-button size="small">养护管理系统</el-button>
-        <el-button size="small">养护作业完成率分析</el-button>
-        <el-button size="small">养护作业监督情况</el-button>
-        <el-button size="small">养护单位养护绿地分析</el-button>
+        <el-button class="ghost-button" size="small">养护管理系统</el-button>
+        <el-button class="ghost-button" size="small">养护作业完成率分析</el-button>
+        <el-button class="ghost-button" size="small">养护作业监督情况</el-button>
+        <el-button class="ghost-button" size="small">养护单位养护绿地分析</el-button>
       </div>
       <p>{{currentTime}}</p>
       <!-- 地图图层配置 -->
@@ -70,7 +70,7 @@
             <span class="realtime-content-value" style="margin-left: 40px">2000</span>
           </div>
 
-          <div style="display: flex;justify-content: space-around;">
+          <div style="display: flex;justify-content: space-around;margin-top: 7px;">
           	<div>
 	            <p class="image-text-box">
 	              <img src="../assets/icon_maintain_user.png" class="icon-maintain" alt="">
@@ -90,7 +90,7 @@
 	          </div>
           </div>
 
-          <div style="display: flex;justify-content: space-around;">
+          <div style="display: flex;justify-content: space-around;margin-top: 7px;">
           	<div>
 	            <p class="image-text-box">
 	              <img src="../assets/icon_maintain_user.png" class="icon-maintain" alt="">
@@ -113,8 +113,35 @@
       </div>
     </div>
 
+    <div class="search-box">
+    	<el-input
+		    placeholder=""
+		    suffix-icon="el-icon-search"
+		    v-model="input1">
+		  </el-input>
+
+		  <el-button style="margin-left: 10px;">全区本月养护工作覆盖面分析</el-button>
+		  <el-button>全区本月养护工作聚集分析</el-button>
+    </div>
     <div class="map-layers">
-    	
+    	<el-collapse v-model="activeNames">
+			  <el-collapse-item name="1">
+			  	<template slot="title">
+			      <div class="layer-image-text-box">
+			      	<img src="../assets/layers.png" class="icon-maintain" alt="">
+			      	<span>图层</span>
+			      </div>
+			    </template>
+
+			    <div v-for="item in layersData" :key="item.label" class="layer-item">
+			    	<p class="layer-image-text-box">
+			    		<img :src="item.img" alt="">
+			    		<span>{{item.label}}</span>
+			    	</p>
+			    	<el-switch v-model="item.checked"></el-switch>
+			    </div>
+			  </el-collapse-item>
+			</el-collapse>
     </div>
   </div>
 </template>
@@ -124,6 +151,9 @@
 	import moment from 'moment'
 	import * as echarts from 'echarts'
 	import { returnRateOptions } from './echarts-func.js'
+	import imageA from '../assets/imageA.png'
+	import imageB from '../assets/imageB.png'
+	import imageC from '../assets/imageC.png'
 
 	const layerConfig = [
 		{ label: '2d地图', key: '2d', funcName: 'setMapLayer2d' },
@@ -138,7 +168,14 @@
 			return {
 				currentTime: moment().format('YYYY年MM月DD日'),
 				activeMapLayer: '2d',
-				layerConfig
+				layerConfig,
+				layersData: [
+					{ label: '养护绿地', img: imageA, checked: true },
+					{ label: '实时养护人员', img: imageB, checked: false },
+					{ label: '待整改问题', img: imageC, checked: false },
+				],
+				activeNames: '1',
+				input1: ''
 			}
 		},
 		mounted() {
@@ -187,6 +224,7 @@
 		display: flex;
 		justify-content: flex-end;
 		flex: 1;
+		font-size: 13px;
 		color: white;
 		> span {
 			cursor: pointer;
@@ -205,11 +243,37 @@
 		position: absolute;
 		top: 50px;
 		right: 0px;
-		height: 300px;
+		// height: 300px;
 		width: 200px;
 		box-sizing: border-box;
-		background-color: @bgColor;
-		border-top: 4px solid @sysColor; 
+		// background-color: @bgColor;
+		border-top: 4px solid @sysColor;
+		.layer-image-text-box {
+			display: flex;
+			align-items: center;
+			padding-left: 10px;
+		}
+		.layer-item {
+			display: flex;
+			justify-content: space-between;
+			padding: 5px 10px;
+			color: @sysColor;
+			img {
+				width: 20px;
+				height: 20px;
+				margin-right: 5px;
+			}
+			.layer-image-text-box {
+				padding-left: 0px;
+			}
+		}
+	}
+
+	.search-box {
+		display: flex;
+		position: absolute;
+		top: 60px;
+		left: 310px;
 	}
 }
 
@@ -223,6 +287,7 @@
 	left: 0px;
 	border-top: 4px solid @sysColor; 
 	font-size: 13px;
+	overflow: scroll;
 	.title {
 		display: flex;
 		align-items: center;
@@ -294,6 +359,69 @@
 }
 .tac {
 	text-align: center;
+}
+.ghost-button {
+}
+</style>
+
+<style lang="less">
+@bgColor: rgba(0, 0, 0, 0.7);
+@sysColor: #4aa3a4;
+
+.maintain-manage {
+	.el-collapse {
+		border-top: none;
+		border-bottom: none;
+		background-color: @bgColor;
+	}
+	.ghost-button {
+		background-color: rgba(74, 163, 164, 0.3) !important;
+		border-color: rgba(74, 163, 164, 0.8) !important;
+		color: @sysColor !important;
+		border-width: 1.5px;
+	}
+	.el-collapse-item__header {
+		background-color: transparent;
+		color: @sysColor;
+		border-bottom: none;
+	}
+	.el-collapse-item__wrap {
+		border-top: 1.5px solid #e89f42;
+		background-color: transparent;
+		border-bottom: none;
+	}
+	.el-switch.is-checked .el-switch__core {
+		background-color: @sysColor;
+	}
+	.el-collapse-item__content {
+		padding-top: 5px;
+		padding-bottom: 10px;
+	}
+	.search-box {
+		.el-input {
+			.el-input__icon.el-icon-search {
+				color: black;
+			}
+		}
+		.el-button {
+			background-color: #e89f42;
+			color: white;
+			border: none;
+		}
+		.el-input__inner {
+			background-color: rgba(74, 163, 164, 0.6);
+			border-color: rgba(74, 163, 164, 0.8);
+			border-width: 2px;
+			color: white;
+			&:focus {
+				border-color: rgba(74, 163, 164, 1);
+				border-width: 2px;
+			}
+			&::placeholder {
+				color: rgba(255, 255, 255, 0.5);
+			}
+		}
+	}
 }
 </style>
 
