@@ -3,19 +3,21 @@
 <!--    <maintain-manage msg="Welcome to Your Vue.js App"/>-->
 <!--  </div>-->
   <div>
-    <attendance-manage/>
+    <supervision-manage/>
   </div>
 </template>
 
 <script>
 import MaintainManage from './components/maintain-manage.vue'
 import AttendanceManage from './components/attendance-manage.vue'
+import SupervisionManage from './components/supervision-manage'
 
 export default {
   name: 'App',
   components: {
     // MaintainManage,
-    AttendanceManage
+    // AttendanceManage,
+    SupervisionManage
   }
 }
 </script>
